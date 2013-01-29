@@ -1,0 +1,41 @@
+MUGODISKSPACE EXTENSION
+=======================
+
+   The purpose of this extension is to place statistics about disk space directly on your eZ Publish
+   dashboard (or in any template you want).
+   
+   We decided to develop this extension after a few cases where clients' eZ Publish installations were
+   mysteriously behaving erratically, and the cause was that their servers had run out of space.
+   Since that would probably not be the first thing you would expect when it happens, this dashboard widget
+   is helpful to alert users before the unexpected happens!
+
+INSTALLATION
+============
+
+1/ Extract the mugodiskspace folder to your extension folder.
+
+2/ Enable the extension, clear the cache, and regenerate the autoloads array.
+
+3/ Edit the extension/mugodiskspace/mugodiskspace.ini.append.php file, setting the "path[]" to the list of
+   drives you want to monitor on your server. On a Windows server, the path can be "C:", "D:", etc while on a
+   Unix server the path would be something like "/" or "/dev/sda1".
+
+4/ That's it! Your dashboard should now display disk space information for each of the paths.
+
+   You can also display disk space information in any template by calling the operator:
+
+   {def $diskStats = getDiskSpace( $pathToDrive )} where $pathToDrive is the path of the drive you want to 
+   monitor as described above. The variable $diskStats will then be an array with the following values:
+   $diskStats.total: total disk space
+   $diskStats.free:  disk space available
+   $diskStats.used:  disk space used
+
+IMPORTANT NOTES
+===============
+
+   If you already have dashboard.ini.append.php in the settings/override folder with a reset of the
+   DashboardBlocks variable ( DashboardBlocks[] ) at the beginning of the DashboardSettings block, make
+   sure you add the mugodiskspace block in that file as well: DashboardBlocks[]=mugodiskspace.
+
+   This extension uses the disk_total_space() and disk_free_space() PHP functions, which require read
+   permissions on the given path. If permissions are not properly set, the operator will return "N/A".
